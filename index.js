@@ -1,12 +1,13 @@
-const { Engine, Render, Runner, World, Bodies } = Matter;
+const { Engine, Render, Runner, World, Bodies, Body } = Matter;
 
-const cells = 3;
+const cells = 10;
 const width = 600;
 const height = 600;
 
 const unitLength = width / cells;
 
 const engine = Engine.create();
+engine.world.gravity.y = 0;
 const { world } = engine;
 const render = Render.create({
   element: document.body,
@@ -112,8 +113,6 @@ const stepThrough = (row, column) => {
 
     stepThrough(nextRow, nextColumn);
   }
-
-  // move to next cell
 };
 
 stepThrough(startRow, startColumn);
@@ -152,17 +151,41 @@ verticals.forEach((row, rowIndex) => {
         isStatic: true,
       }
     );
-    World.add(world, wall)
+    World.add(world, wall);
   });
 });
+
+// goal
 
 const goal = Bodies.rectangle(
   width - unitLength / 2,
   height - unitLength / 2,
-  unitLength * .7,
-  unitLength * .7,
+  unitLength * 0.7,
+  unitLength * 0.7,
   {
-    isStatic: true
+    isStatic: true,
   }
 );
-World.add(world, goal)
+World.add(world, goal);
+
+// ball
+
+const ball = Bodies.circle(unitLength / 2, unitLength / 2, unitLength / 4);
+World.add(world, ball);
+
+document.addEventListener("keydown", (event) => {
+  const { x, y } = ball.velocity;
+
+  if (event.keyCode === 87 || event.keyCode === 38) {
+    Body.setVelocity(ball, { x, y: y - 5 });
+  }
+  if (event.keyCode === 68 || event.keyCode === 39) {
+    Body.setVelocity(ball, { x: x + 5, y });
+  }
+  if (event.keyCode === 83 || event.keyCode === 40) {
+    Body.setVelocity(ball, { x, y: y + 5 });
+  }
+  if (event.keyCode === 65 || event.keyCode === 37) {
+    Body.setVelocity(ball, { x: x - 5, y });
+  }
+});
