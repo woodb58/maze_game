@@ -1,9 +1,10 @@
 const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
-const cellsHorizontal = 10;
-const cellsVertical = 8;
+const cellsHorizontal = 20;
+const cellsVertical = 16;
 const width = window.innerWidth;
 const height = window.innerHeight;
+document.body.style.overflow = "hidden";
 
 const unitLengthX = width / cellsHorizontal;
 const unitLengthY = height / cellsVertical;
